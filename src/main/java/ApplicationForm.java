@@ -5,10 +5,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ApplicationForm extends JFrame{
+public class ApplicationForm extends JFrame {
     private JTextField inputField;
 
     public ApplicationForm() throws HeadlessException {
@@ -32,7 +31,10 @@ public class ApplicationForm extends JFrame{
         JMenu menu = new JMenu("File");
         menuBar.add(menu);
 
-        menu.add(new JMenuItem("Clear"));
+        JMenuItem clear = menu.add(new JMenuItem("Clear"));
+        clear.addActionListener(e -> {
+            inputField.setText("");
+        });
         JMenuItem exit = menu.add(new JMenuItem("Exit"));
         exit.addActionListener(new ExitButtonListener());
 
@@ -90,34 +92,24 @@ public class ApplicationForm extends JFrame{
         advPanel.add(divide);
 
 
-
         JButton calc = new JButton("=");
         calc.addActionListener(e -> {
 
-            //ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("Nashorn");
+            ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("Nashorn");
 
             String expression = inputField.getText();
 
-
             try {
-                ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("Nashorn");
                 System.out.println(scriptEngine.eval(expression));
                 inputField.setText(String.valueOf(scriptEngine.eval(expression)));
             } catch (ScriptException scriptException) {
                 scriptException.printStackTrace();
             }
 
-
         });
         digitsPanel.add(calc);
 
         JButton clear = new JButton("C");
-/*        clear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inputField.setText("");
-            }
-        });*/
 
         clear.addActionListener(e -> inputField.setText(""));
         digitsPanel.add(clear);
